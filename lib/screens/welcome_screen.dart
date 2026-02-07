@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
+import 'dashboard_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -36,11 +36,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     // Start Adventure Button - Image Button
                     GestureDetector(
                       onTap: () {
-                        // Navigate to main app (placeholder)
+                        // Navigate to dashboard
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) =>
-                                const MyHomePage(title: 'VocaAid'),
+                            builder: (context) => const DashboardScreen(),
                           ),
                         );
                       },
