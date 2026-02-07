@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'sound_selection_screen.dart';
-import 'rewards_screen.dart';
+
 import 'how_to_use_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -18,6 +17,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: ClipOval(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HowToUseScreen(),
+                  ),
+                );
+              },
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: const Icon(Icons.help_outline, color: Colors.grey),
+            ),
+          ),
+        ),
+      ),
       extendBody: true,
       body: Container(
         width: double.infinity,
@@ -39,65 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Spacer(flex: 2),
-
-                    // Primary Button - Practice Sounds
-                    _buildPrimaryButton(
-                      context,
-                      label: 'Practice Sounds',
-                      icon: Icons.mic,
-                      color: Color(0xFF4CAF50), // Green
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SoundSelectionScreen(),
-                          ),
-                        );
-                      },
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Secondary Buttons Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // My Rewards Button
-                        _buildSecondaryButton(
-                          context,
-                          label: 'My Rewards',
-                          icon: Icons.star,
-                          color: Color(0xFFFFD700), // Gold
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RewardsScreen(),
-                              ),
-                            );
-                          },
-                        ),
-
-                        const SizedBox(width: 20),
-
-                        // How to Use Button
-                        _buildSecondaryButton(
-                          context,
-                          label: 'How to Use',
-                          icon: Icons.help_outline,
-                          color: Color(0xFF2196F3), // Blue
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HowToUseScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-
+                    // Centered content can go here if needed, or just spacers
                     const Spacer(flex: 3),
                   ],
                 ),
@@ -168,7 +146,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                           // User Avatar
                           CircleAvatar(
-                            radius: 25,
+                            radius: 35,
                             backgroundColor: Colors.transparent,
                             backgroundImage: AssetImage(
                               'assets/images/profile_avatar/lion.png',
@@ -242,91 +220,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPrimaryButton(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 280,
-        height: 100,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 40),
-            const SizedBox(width: 12),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSecondaryButton(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 140,
-        height: 140,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 48),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
         ),
       ),
     );
