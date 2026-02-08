@@ -200,6 +200,9 @@ class _PracticeScreenState extends State<PracticeScreen>
   void initState() {
     super.initState();
 
+    // Pause background music during practice to avoid conflict with TTS
+    _soundService.stopBackgroundMusic();
+
     // Pulse animation for recording
     _pulseController = AnimationController(
       vsync: this,
@@ -267,6 +270,10 @@ class _PracticeScreenState extends State<PracticeScreen>
     _feedbackController.dispose();
     _flutterTts.stop();
     _audioRecorder.dispose();
+
+    // Resume background music when exiting practice
+    _soundService.playBackgroundMusic();
+
     super.dispose();
   }
 

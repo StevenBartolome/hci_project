@@ -27,6 +27,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const Center(child: Text("Profile Screen - Coming Soon")),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    // Ensure background music continues playing
+    _soundService.playBackgroundMusic();
+  }
+
   void _onItemTapped(int index) {
     _soundService.playClick();
     setState(() {

@@ -3,12 +3,38 @@ import 'package:audioplayers/audioplayers.dart';
 class SoundService {
   static final SoundService _instance = SoundService._internal();
   factory SoundService() => _instance;
-  SoundService._internal();
 
   final AudioPlayer _clickPlayer = AudioPlayer();
   final AudioPlayer _backgroundMusicPlayer = AudioPlayer();
   bool _isMuted = false;
   bool _isBackgroundMusicPlaying = false;
+  bool _audioContextConfigured = false;
+
+  SoundService._internal();
+
+  Future<void> _ensureAudioContextConfigured() async {
+    if (_audioContextConfigured) return;
+
+    try {
+      final AudioContext audioContext = AudioContext(
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.playback,
+          options: {AVAudioSessionOptions.mixWithOthers},
+        ),
+        android: AudioContextAndroid(
+          isSpeakerphoneOn: false,
+          stayAwake: false,
+          contentType: AndroidContentType.music,
+          usageType: AndroidUsageType.media,
+          audioFocus: AndroidAudioFocus.none,
+        ),
+      );
+      await AudioPlayer.global.setAudioContext(audioContext);
+      _audioContextConfigured = true;
+    } catch (e) {
+      print('Error configuring audio context: $e');
+    }
+  }
 
   /// Get current mute status
   bool get isMuted => _isMuted;
@@ -31,6 +57,9 @@ class SoundService {
   /// Play background music with loop
   Future<void> playBackgroundMusic() async {
     if (_isBackgroundMusicPlaying) return;
+
+    // Ensure audio context is configured first
+    await _ensureAudioContextConfigured();
 
     try {
       await _backgroundMusicPlayer.setReleaseMode(ReleaseMode.loop);

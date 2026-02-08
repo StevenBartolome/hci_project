@@ -29,6 +29,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _floatAnimation = Tween<double>(begin: -8, end: 8).animate(
       CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
     );
+
+    // Start background music
+    _soundService.playBackgroundMusic();
   }
 
   void _toggleMute() {
