@@ -7,6 +7,9 @@ import 'package:hci_project/services/sound_service.dart';
 import 'how_to_use_screen.dart';
 import 'sound_selection_screen.dart';
 import 'rewards_screen.dart';
+import 'profile_screen.dart';
+import 'practice_progress_screen.dart';
+import 'parent_dashboard_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,16 +23,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final SoundService _soundService = SoundService();
 
   // List of pages for navigation
-  final List<Widget> _pages = [
-    const _HomeContentPlaceholder(), // Placeholder for the extracted home content
-    const SoundSelectionScreen(),
-    const RewardsScreen(),
-    const Center(child: Text("Profile Screen - Coming Soon")),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _pages = [
+      const _HomeContentPlaceholder(), // Placeholder for the extracted home content
+      const SoundSelectionScreen(),
+      const RewardsScreen(),
+      ProfileScreen(
+        onNavigateToRewards: () {
+          _onItemTapped(2);
+        },
+      ),
+    ];
     // Ensure background music continues playing
     _soundService.playBackgroundMusic();
   }
@@ -107,7 +115,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _buildAchievements(),
 
                     // Extra space for FAB and BottomNavBar
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -149,28 +157,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Expanded(
                   child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.orange.shade200,
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                      GestureDetector(
+                        onTap: () {
+                          _soundService.playClick();
+                          _onItemTapped(3); // Navigate to Profile tab
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.orange.shade200,
+                              width: 2,
                             ),
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: 24,
-                          backgroundColor: Colors.orange.shade50,
-                          backgroundImage: const AssetImage(
-                            'assets/images/profile_avatar/lion.png',
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: CircleAvatar(
+                            radius: 24,
+                            backgroundColor: Colors.orange.shade50,
+                            backgroundImage: const AssetImage(
+                              'assets/images/profile_avatar/lion.png',
+                            ),
                           ),
                         ),
                       ),
@@ -210,7 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     tooltip: 'Parent Access',
                     onPressed: () {
                       _soundService.playClick();
-                      // TODO: Implement Parent Access
+                      _showPinDialog(context);
                     },
                   ),
                 ),
@@ -318,7 +332,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: Colors.purple.shade100,
           iconColor: Colors.purple.shade700,
           onTap: () {
-            // TODO: Implement Progress page or modal
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PracticeProgressScreen(),
+              ),
+            );
           },
         ),
       ],
@@ -552,7 +571,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _onItemTapped(2); // Navigate to Rewards
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: const Size(50, 30),
@@ -797,6 +818,140 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showPinDialog(BuildContext context) {
+    final TextEditingController pinController = TextEditingController();
+    const String correctPin = "123456";
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(25),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.95),
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.6),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Parent Access 🔒",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown.shade800,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _soundService.playClick();
+                              Navigator.pop(context);
+                            },
+                            child: Icon(Icons.close, color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: TextField(
+                          controller: pinController,
+                          obscureText: true,
+                          keyboardType: TextInputType.number,
+                          maxLength: 6,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Enter PIN (123456)",
+                            counterText: "",
+                            icon: Icon(Icons.lock_outline),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _soundService.playClick();
+                            if (pinController.text == correctPin) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ParentDashboardScreen(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    "Incorrect PIN. Try 123456",
+                                  ),
+                                  backgroundColor: Colors.red.shade400,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange.shade400,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            elevation: 5,
+                          ),
+                          child: const Text(
+                            "Enter Parent Mode",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
