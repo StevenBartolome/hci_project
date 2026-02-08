@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'screens/splash_screen.dart';
+import 'services/sound_service.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final SoundService _soundService = SoundService();
+
+  @override
+  void initState() {
+    super.initState();
+    // Start background music when app launches
+    _soundService.playBackgroundMusic();
+  }
 
   // This widget is the root of your application.
   @override

@@ -1,118 +1,146 @@
 import 'package:flutter/material.dart';
+import 'package:hci_project/services/sound_service.dart';
 import 'dart:ui';
 import 'package:hci_project/widgets/hover_builder.dart';
 
-class RewardsScreen extends StatelessWidget {
+class RewardsScreen extends StatefulWidget {
   const RewardsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        extendBody: true,
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/safari_background.png'),
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
-            ),
-          ),
-          child: SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                // 1. Header Section
-                _buildHeader(),
+  State<RewardsScreen> createState() => _RewardsScreenState();
+}
 
-                // 2. Tab Bar
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
+class _RewardsScreenState extends State<RewardsScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final SoundService _soundService = SoundService();
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+
+    // Play click sound when tab changes
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        _soundService.playClick();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/safari_background.png'),
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          ),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              // 1. Header Section
+              _buildHeader(),
+
+              // 2. Tab Bar
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: TabBar(
+                        controller: _tabController,
+                        indicator: BoxDecoration(
+                          color: Colors.orange.shade400,
                           borderRadius: BorderRadius.circular(25),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.5),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
                         ),
-                        child: TabBar(
-                          indicator: BoxDecoration(
-                            color: Colors.orange.shade400,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          labelColor: Colors.white,
-                          unselectedLabelColor: Colors.brown.shade700,
-                          labelStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                          dividerColor: Colors.transparent,
-                          tabs: const [
-                            Tab(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("🎨"),
-                                  SizedBox(width: 8),
-                                  Text("Stickers"),
-                                ],
-                              ),
-                            ),
-                            Tab(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("🏅"),
-                                  SizedBox(width: 8),
-                                  Text("Badges"),
-                                ],
-                              ),
-                            ),
-                            Tab(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("🏆"),
-                                  SizedBox(width: 8),
-                                  Text("Wins"),
-                                ],
-                              ),
-                            ),
-                          ],
+                        labelColor: Colors.white,
+                        unselectedLabelColor: Colors.brown.shade700,
+                        labelStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
+                        dividerColor: Colors.transparent,
+                        tabs: const [
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("🎨"),
+                                SizedBox(width: 8),
+                                Text("Stickers"),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("🏅"),
+                                SizedBox(width: 8),
+                                Text("Badges"),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("🏆"),
+                                SizedBox(width: 8),
+                                Text("Wins"),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
+              ),
 
-                // 3. Tab Content
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      _buildStickersTab(),
-                      _buildBadgesTab(),
-                      _buildWinsTab(),
-                    ],
-                  ),
+              // 3. Tab Content
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildStickersTab(),
+                    _buildBadgesTab(),
+                    _buildWinsTab(),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -547,7 +575,9 @@ class RewardsScreen extends StatelessWidget {
                         ),
                         if (isEarned) ...[
                           const SizedBox(width: 8),
+
                           Container(
+                            // Keeping the original "EARNED! 🎉" badge as the instruction was ambiguous
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,
                               vertical: 4,
