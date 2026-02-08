@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:hci_project/services/sound_service.dart';
 
 class ParentDashboardScreen extends StatefulWidget {
   const ParentDashboardScreen({super.key});
@@ -11,6 +12,7 @@ class ParentDashboardScreen extends StatefulWidget {
 class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final SoundService _soundService = SoundService();
 
   // Settings State
   bool _soundEffectsEnabled = true;
@@ -35,6 +37,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     bool selected = _selectedAvatar == assetPath;
     return GestureDetector(
       onTap: () {
+        _soundService.playClick();
         setState(() {
           _selectedAvatar = assetPath;
         });
@@ -235,7 +238,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                 ],
               ),
               IconButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  _soundService.playClick();
+                  Navigator.pop(context);
+                },
                 icon: const Icon(Icons.exit_to_app, color: Colors.white),
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.redAccent.withOpacity(0.8),
@@ -386,7 +392,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
             actionLabel: 'Schedule Practice',
             color: Colors.blue.shade50,
             accentColor: Colors.blue,
-            onPressed: () => _pickDateAndSave(context, 'Schedule Practice'),
+            onPressed: () {
+              _soundService.playClick();
+              _pickDateAndSave(context, 'Schedule Practice');
+            },
           ),
           const SizedBox(height: 12),
           _buildInsightCard(
@@ -396,7 +405,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
             actionLabel: 'Send Praise',
             color: Colors.green.shade50,
             accentColor: Colors.green,
-            onPressed: () => _sendPraise(context),
+            onPressed: () {
+              _soundService.playClick();
+              _sendPraise(context);
+            },
           ),
           const SizedBox(height: 12),
           _buildInsightCard(
@@ -406,7 +418,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
             actionLabel: 'Set Reminder',
             color: Colors.amber.shade50,
             accentColor: Colors.amber.shade800,
-            onPressed: () => _pickDateAndSave(context, 'Set Reminder'),
+            onPressed: () {
+              _soundService.playClick();
+              _pickDateAndSave(context, 'Set Reminder');
+            },
           ),
         ],
       ),
@@ -791,6 +806,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
               _buildSectionTitle('History'),
               ElevatedButton.icon(
                 onPressed: () {
+                  _soundService.playClick();
                   // TODO: Implement export functionality
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Exporting report...')),
@@ -1105,28 +1121,40 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                   'Sound Effects',
                   'Play sounds during practice',
                   _soundEffectsEnabled,
-                  (val) => setState(() => _soundEffectsEnabled = val),
+                  (val) {
+                    _soundService.playClick();
+                    setState(() => _soundEffectsEnabled = val);
+                  },
                 ),
                 const Divider(),
                 _buildToggleSetting(
                   'Practice Reminders',
                   'Daily notification at 3:00 PM',
                   _practiceRemindersEnabled,
-                  (val) => setState(() => _practiceRemindersEnabled = val),
+                  (val) {
+                    _soundService.playClick();
+                    setState(() => _practiceRemindersEnabled = val);
+                  },
                 ),
                 const Divider(),
                 _buildToggleSetting(
                   'Weekly Progress Report',
                   'Receive email summary',
                   _weeklyReportEnabled,
-                  (val) => setState(() => _weeklyReportEnabled = val),
+                  (val) {
+                    _soundService.playClick();
+                    setState(() => _weeklyReportEnabled = val);
+                  },
                 ),
                 const Divider(),
                 _buildToggleSetting(
                   'Child Safety Mode',
                   'Restrict app features',
                   _childSafetyModeEnabled,
-                  (val) => setState(() => _childSafetyModeEnabled = val),
+                  (val) {
+                    _soundService.playClick();
+                    setState(() => _childSafetyModeEnabled = val);
+                  },
                 ),
               ],
             ),
@@ -1144,17 +1172,26 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
               children: [
                 _buildSettingsListTile(
                   'Change Parent PIN',
-                  onTap: () => _showChangePINDialog(context),
+                  onTap: () {
+                    _soundService.playClick();
+                    _showChangePINDialog(context);
+                  },
                 ),
                 const Divider(height: 1),
                 _buildSettingsListTile(
                   'Privacy Policy',
-                  onTap: () => _showPrivacyPolicyDialog(context),
+                  onTap: () {
+                    _soundService.playClick();
+                    _showPrivacyPolicyDialog(context);
+                  },
                 ),
                 const Divider(height: 1),
                 _buildSettingsListTile(
                   'Help & Support',
-                  onTap: () => _showHelpSupportDialog(context),
+                  onTap: () {
+                    _soundService.playClick();
+                    _showHelpSupportDialog(context);
+                  },
                 ),
               ],
             ),
@@ -1162,6 +1199,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
+              _soundService.playClick();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('Settings saved successfully!'),
@@ -1187,7 +1225,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
           ),
           const SizedBox(height: 16),
           InkWell(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              _soundService.playClick();
+              Navigator.pop(context);
+            },
             borderRadius: BorderRadius.circular(16),
             child: Container(
               padding: const EdgeInsets.all(16),
@@ -1326,11 +1367,15 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              _soundService.playClick();
+              Navigator.pop(context);
+            },
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
+              _soundService.playClick();
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -1385,11 +1430,15 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                _soundService.playClick();
+                Navigator.pop(context);
+              },
               child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
+                _soundService.playClick();
                 // Implement PIN change logic here
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -1429,7 +1478,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                _soundService.playClick();
+                Navigator.pop(context);
+              },
               child: const Text('Close'),
             ),
           ],
@@ -1513,7 +1565,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                             ),
                           ),
                           IconButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              _soundService.playClick();
+                              Navigator.pop(context);
+                            },
                             icon: const Icon(
                               Icons.close_rounded,
                               color: Colors.white,
