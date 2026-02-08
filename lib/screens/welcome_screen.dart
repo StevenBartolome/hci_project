@@ -132,7 +132,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       _soundService.isMuted
                           ? Icons.volume_off
                           : Icons.volume_up,
-                      color: _soundService.isMuted ? Colors.red : Colors.blue,
+                      color: Colors.orange,
                       size: 32,
                     ),
                   ),

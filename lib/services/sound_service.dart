@@ -70,15 +70,43 @@ class SoundService {
     }
   }
 
-  /// Play background music with loop
-  Future<void> playBackgroundMusic() async {
-    if (_isBackgroundMusicPlaying) return;
-
+  /// Play login background music with loop
+  Future<void> playLoginMusic() async {
     // Ensure audio context is configured first
     await _ensureAudioContextConfigured();
 
     try {
+      // Stop current music if different track is playing
+      if (_isBackgroundMusicPlaying) {
+        await _backgroundMusicPlayer.stop();
+      }
+
       await _backgroundMusicPlayer.setReleaseMode(ReleaseMode.loop);
+      await _backgroundMusicPlayer.setVolume(_musicVolume);
+      await _backgroundMusicPlayer.play(AssetSource('sounds/login_sound.mp3'));
+      _isBackgroundMusicPlaying = true;
+
+      if (_isMuted) {
+        await _backgroundMusicPlayer.pause();
+      }
+    } catch (e) {
+      print('Error playing login music: $e');
+    }
+  }
+
+  /// Play background music with loop
+  Future<void> playBackgroundMusic() async {
+    // Ensure audio context is configured first
+    await _ensureAudioContextConfigured();
+
+    try {
+      // Stop current music if different track is playing
+      if (_isBackgroundMusicPlaying) {
+        await _backgroundMusicPlayer.stop();
+      }
+
+      await _backgroundMusicPlayer.setReleaseMode(ReleaseMode.loop);
+      await _backgroundMusicPlayer.setVolume(_musicVolume);
       await _backgroundMusicPlayer.play(AssetSource('sounds/intro_sounds.mp3'));
       _isBackgroundMusicPlaying = true;
 

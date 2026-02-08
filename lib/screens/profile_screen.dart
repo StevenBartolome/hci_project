@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:ui';
 import 'package:hci_project/services/sound_service.dart';
 import 'package:hci_project/widgets/hover_builder.dart';
 import 'package:hci_project/screens/rewards_screen.dart';
 import 'package:hci_project/screens/parent_dashboard_screen.dart';
+import 'package:hci_project/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback? onNavigateToRewards;
@@ -20,7 +22,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _soundService.playBackgroundMusic();
+    // Only play background music if not already playing
+    if (!_soundService.isBackgroundMusicPlaying) {
+      _soundService.playBackgroundMusic();
+    }
   }
 
   @override
@@ -622,6 +627,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 MaterialPageRoute(builder: (context) => const RewardsScreen()),
               );
             }
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildActionButton(
+          icon: Icons.logout,
+          iconEmoji: "🚪",
+          title: "Logout",
+          subtitle: "Return to login screen",
+          gradient: [Colors.red.shade300, Colors.orange.shade400],
+          onTap: () {
+            _soundService.playClick();
+            // Navigate to login and clear all previous routes
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) => false,
+            );
           },
         ),
       ],
