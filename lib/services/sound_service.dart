@@ -12,6 +12,22 @@ class SoundService {
 
   SoundService._internal();
 
+  double _musicVolume = 0.5;
+  double _sfxVolume = 0.8;
+
+  double get musicVolume => _musicVolume;
+  double get sfxVolume => _sfxVolume;
+
+  Future<void> setMusicVolume(double volume) async {
+    _musicVolume = volume;
+    await _backgroundMusicPlayer.setVolume(volume);
+  }
+
+  Future<void> setSfxVolume(double volume) async {
+    _sfxVolume = volume;
+    await _clickPlayer.setVolume(volume);
+  }
+
   Future<void> _ensureAudioContextConfigured() async {
     if (_audioContextConfigured) return;
 

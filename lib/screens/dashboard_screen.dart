@@ -7,6 +7,7 @@ import 'package:hci_project/services/sound_service.dart';
 import 'how_to_use_screen.dart';
 import 'sound_selection_screen.dart';
 import 'rewards_screen.dart';
+import 'profile_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,16 +21,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final SoundService _soundService = SoundService();
 
   // List of pages for navigation
-  final List<Widget> _pages = [
-    const _HomeContentPlaceholder(), // Placeholder for the extracted home content
-    const SoundSelectionScreen(),
-    const RewardsScreen(),
-    const Center(child: Text("Profile Screen - Coming Soon")),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _pages = [
+      const _HomeContentPlaceholder(), // Placeholder for the extracted home content
+      const SoundSelectionScreen(),
+      const RewardsScreen(),
+      ProfileScreen(
+        onNavigateToRewards: () {
+          _onItemTapped(2);
+        },
+      ),
+    ];
     // Ensure background music continues playing
     _soundService.playBackgroundMusic();
   }
