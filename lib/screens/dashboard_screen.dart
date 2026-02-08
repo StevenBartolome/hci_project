@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'how_to_use_screen.dart';
-import 'profile_screen.dart';
-import '../widgets/hover_builder.dart';
+import 'sound_selection_screen.dart';
+import 'rewards_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,71 +16,94 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
 
+  // List of pages for navigation
+  final List<Widget> _pages = [
+    const _HomeContentPlaceholder(), // Placeholder for the extracted home content
+    const SoundSelectionScreen(),
+    const RewardsScreen(),
+    const Center(child: Text("Profile Screen - Coming Soon")),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // If on Home tab (index 0), show the full custom home layout
+    // Otherwise, show the simple page layout from the list
+    Widget currentBody;
+    if (_selectedIndex == 0) {
+      currentBody = _buildHomeContent();
+    } else {
+      currentBody = _pages[_selectedIndex];
+    }
+
     return Scaffold(
       extendBody: true,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/safari_background.png'),
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-            colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.5),
-              BlendMode.dstATop,
-            ),
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // 1. Header with Greeting & Parent Access
-              _buildHeader(),
+      body: currentBody,
+      floatingActionButton: _selectedIndex == 0 ? _buildFab() : null,
+      bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
 
-              // Scrollable Content
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 2. Streak Tracker
-                      _buildStreakTracker(),
-                      const SizedBox(height: 20),
-
-                      // 3. Quick Action Cards
-                      _buildQuickActionCards(),
-                      const SizedBox(height: 20),
-
-                      // 4. Featured Character / Mascot
-                      _buildMascotSection(),
-                      const SizedBox(height: 20),
-
-                      // 5. Recent Activity / Quick Resume
-                      _buildQuickResume(),
-                      const SizedBox(height: 20),
-
-                      // 6. Achievements / Badges
-                      _buildAchievements(),
-
-                      // Extra space for FAB and BottomNavBar
-                      const SizedBox(height: 100),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+  Widget _buildHomeContent() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/safari_background.png'),
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
         ),
       ),
-      floatingActionButton: _buildFab(),
-      bottomNavigationBar: _buildBottomNavBar(),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // 1. Header with Greeting & Parent Access
+            _buildHeader(),
+
+            // Scrollable Content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 2. Streak Tracker
+                    _buildStreakTracker(),
+                    const SizedBox(height: 20),
+
+                    // 3. Quick Action Cards
+                    _buildQuickActionCards(),
+                    const SizedBox(height: 20),
+
+                    // 4. Featured Character / Mascot
+                    _buildMascotSection(),
+                    const SizedBox(height: 20),
+
+                    // 5. Recent Activity / Quick Resume
+                    _buildQuickResume(),
+                    const SizedBox(height: 20),
+
+                    // 6. Achievements / Badges
+                    _buildAchievements(),
+
+                    // Extra space for FAB and BottomNavBar
+                    const SizedBox(height: 100),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -94,15 +117,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.white.withOpacity(0.4),
+                color: Colors.white.withValues(alpha: 0.4),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -143,7 +166,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // Parent Access Button
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -172,10 +195,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.orange.withOpacity(0.3), width: 2),
+        border: Border.all(color: Colors.orange.withValues(alpha: 0.3), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.orange.withOpacity(0.2),
+            color: Colors.orange.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -234,7 +257,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           icon: Icons.mic,
           color: Colors.blue.shade100,
           iconColor: Colors.blue.shade700,
-          onTap: () {},
+          onTap: () {
+            _onItemTapped(1); // Switch to Practice tab
+          },
         ),
         const SizedBox(width: 12),
         _buildActionCard(
@@ -242,7 +267,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           icon: Icons.star,
           color: Colors.amber.shade100,
           iconColor: Colors.amber.shade700,
-          onTap: () {},
+          onTap: () {
+            _onItemTapped(2); // Switch to Rewards tab
+          },
         ),
         const SizedBox(width: 12),
         _buildActionCard(
@@ -250,7 +277,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           icon: Icons.bar_chart,
           color: Colors.purple.shade100,
           iconColor: Colors.purple.shade700,
-          onTap: () {},
+          onTap: () {
+            // TODO: Implement Progress page or modal
+          },
         ),
       ],
     );
@@ -264,53 +293,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required VoidCallback onTap,
   }) {
     return Expanded(
-      child: HoverBuilder(
-        builder: (context, isHovered) {
-          return Transform.scale(
-            scale: isHovered ? 1.05 : 1.0,
-            child: GestureDetector(
-              onTap: onTap,
-              child: Container(
-                height: 110,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 110,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(isHovered ? 0.15 : 0.05),
-                      blurRadius: isHovered ? 12 : 8,
-                      offset: isHovered
-                          ? const Offset(0, 6)
-                          : const Offset(0, 4),
-                    ),
-                  ],
+                  color: Colors.white.withValues(alpha: 0.6),
+                  shape: BoxShape.circle,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(icon, size: 32, color: iconColor),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: iconColor,
-                      ),
-                    ),
-                  ],
+                child: Icon(icon, size: 32, color: iconColor),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor,
                 ),
               ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -320,21 +340,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 20),
-          // Changed padding to match other cards (16) but kept right padding for mascot
-          padding: const EdgeInsets.fromLTRB(16, 16, 140, 16),
+          padding: const EdgeInsets.fromLTRB(20, 30, 140, 20),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white, width: 2),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
-
           child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -371,12 +389,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -425,7 +443,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                     _onItemTapped(1); // Resume goes to Practice tab
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
@@ -452,12 +472,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -531,12 +551,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       margin: const EdgeInsets.only(right: 12),
       width: 70,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         shape: BoxShape.circle,
-        border: Border.all(color: color.withOpacity(0.5), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.5), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -558,12 +578,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       margin: const EdgeInsets.only(right: 12),
       width: 70,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         shape: BoxShape.circle,
-        border: Border.all(color: color.withOpacity(0.5), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.5), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -574,51 +594,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildFab() {
-    return HoverBuilder(
-      builder: (context, isHovered) {
-        return Transform.scale(
-          scale: isHovered ? 1.1 : 1.0,
-          child: ClipOval(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
-                    width: 1.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(isHovered ? 0.2 : 0.1),
-                      blurRadius: isHovered ? 15 : 10,
-                      offset: isHovered
-                          ? const Offset(0, 8)
-                          : const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HowToUseScreen(),
-                      ),
-                    );
-                  },
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  child: const Icon(Icons.help_outline, color: Colors.grey),
-                ),
-              ),
+    return ClipOval(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.9),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.3),
+              width: 1.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        );
-      },
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HowToUseScreen()),
+              );
+            },
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: const Icon(Icons.help_outline, color: Colors.grey),
+          ),
+        ),
+      ),
     );
   }
 
@@ -631,15 +640,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -693,19 +702,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final bool isSelected = _selectedIndex == index;
     return GestureDetector(
       onTap: () {
-        if (index == 3) {
-          // Navigate to Profile Screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfileScreen()),
-          );
-        } else {
-          setState(() {
-            _selectedIndex = index;
-          });
-        }
+        _onItemTapped(index);
       },
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -731,4 +729,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
+
+// Dummy class to satisfy the List<Widget> type, though strictly not needed if we filter in build
+class _HomeContentPlaceholder extends StatelessWidget {
+    const _HomeContentPlaceholder();
+    @override
+    Widget build(BuildContext context) => const SizedBox.shrink();
 }
