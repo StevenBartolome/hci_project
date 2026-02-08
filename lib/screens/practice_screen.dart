@@ -34,21 +34,49 @@ class _PracticeScreenState extends State<PracticeScreen>
   // Data for sound positions
   final Map<String, List<Map<String, dynamic>>> _soundContent = {
     'S': [
-      {'word': 'Sun', 'icon': Icons.wb_sunny_rounded, 'color': Colors.orange},
-      {'word': 'Basin', 'icon': Icons.wash_rounded, 'color': Colors.blue},
+      {
+        'word': 'Sun',
+        'icon': Icons.wb_sunny_rounded,
+        'color': Colors.orange,
+        'phonetic': '/sʌn/',
+        'simple_pronunciation': 's-uh-n',
+      },
+      {
+        'word': 'Basin',
+        'icon': Icons.wash_rounded,
+        'color': Colors.blue,
+        'phonetic': "/'beɪsn/",
+        'simple_pronunciation': 'BAY-sin',
+      },
       {
         'word': 'Bus',
         'icon': Icons.directions_bus_rounded,
         'color': Colors.yellow,
+        'phonetic': '/bʌs/',
+        'simple_pronunciation': 'b-uh-s',
       },
     ],
     'Z': [
-      {'word': 'Zoo', 'icon': Icons.fence_rounded, 'color': Colors.grey},
-      {'word': 'Puzzle', 'icon': Icons.extension_rounded, 'color': Colors.red},
+      {
+        'word': 'Zoo',
+        'icon': Icons.fence_rounded,
+        'color': Colors.grey,
+        'phonetic': '/zuː/',
+        'simple_pronunciation': 'z-oo',
+      },
+      {
+        'word': 'Puzzle',
+        'icon': Icons.extension_rounded,
+        'color': Colors.red,
+        'phonetic': "/'pʌzl/",
+        'simple_pronunciation': 'PUH-zl',
+      },
       {
         'word': 'Jazz',
         'icon': Icons.music_note_rounded,
         'color': Colors.purple,
+        'phonetic': '/dʒæz/',
+        'simple_pronunciation': 'j-az',
       },
     ],
     'R': [
@@ -56,54 +84,138 @@ class _PracticeScreenState extends State<PracticeScreen>
         'word': 'Rabbit',
         'icon': Icons.pest_control_rodent_rounded,
         'color': Colors.brown,
+        'phonetic': "/'ræbɪt/",
+        'simple_pronunciation': 'RAB-it',
       },
       {
         'word': 'Carrot',
         'icon': Icons.restaurant_rounded,
         'color': Colors.orange,
+        'phonetic': "/'kærət/",
+        'simple_pronunciation': 'KAIR-uh-t',
       },
       {
         'word': 'Car',
         'icon': Icons.directions_car_rounded,
         'color': Colors.red,
+        'phonetic': '/kɑːr/',
+        'simple_pronunciation': 'k-ar',
       },
     ],
     'L': [
-      {'word': 'Lion', 'icon': Icons.pets_rounded, 'color': Colors.orange},
+      {
+        'word': 'Lion',
+        'icon': Icons.pets_rounded,
+        'color': Colors.orange,
+        'phonetic': "/'laɪən/",
+        'simple_pronunciation': 'LIE-uh-n',
+      },
       {
         'word': 'Balloon',
         'icon': Icons.bubble_chart_rounded,
         'color': Colors.pink,
+        'phonetic': "/bə'luːn/",
+        'simple_pronunciation': 'buh-LOON',
       },
       {
         'word': 'Ball',
         'icon': Icons.sports_soccer_rounded,
         'color': Colors.white,
+        'phonetic': '/bɔːl/',
+        'simple_pronunciation': 'b-aw-l',
       },
     ],
     'TH': [
-      {'word': 'Thumb', 'icon': Icons.thumb_up_rounded, 'color': Colors.amber},
-      {'word': 'Toothbrush', 'icon': Icons.brush_rounded, 'color': Colors.blue},
-      {'word': 'Mouth', 'icon': Icons.tag_faces_rounded, 'color': Colors.red},
+      {
+        'word': 'Thumb',
+        'icon': Icons.thumb_up_rounded,
+        'color': Colors.amber,
+        'phonetic': '/θʌm/',
+        'simple_pronunciation': 'th-uh-m',
+      },
+      {
+        'word': 'Toothbrush',
+        'icon': Icons.brush_rounded,
+        'color': Colors.blue,
+        'phonetic': "/'tuːθbrʌʃ/",
+        'simple_pronunciation': 'TOOTH-brush',
+      },
+      {
+        'word': 'Mouth',
+        'icon': Icons.tag_faces_rounded,
+        'color': Colors.red,
+        'phonetic': '/maʊθ/',
+        'simple_pronunciation': 'm-ow-th',
+      },
     ],
     'SH': [
       {
         'word': 'Shoe',
         'icon': Icons.do_not_step_rounded,
         'color': Colors.brown,
+        'phonetic': '/ʃuː/',
+        'simple_pronunciation': 'sh-oo',
       },
-      {'word': 'Fishing', 'icon': Icons.phishing_rounded, 'color': Colors.blue},
-      {'word': 'Fish', 'icon': Icons.set_meal_rounded, 'color': Colors.teal},
+      {
+        'word': 'Fishing',
+        'icon': Icons.phishing_rounded,
+        'color': Colors.blue,
+        'phonetic': "/'fɪʃɪŋ/",
+        'simple_pronunciation': 'FISH-ing',
+      },
+      {
+        'word': 'Fish',
+        'icon': Icons.set_meal_rounded,
+        'color': Colors.teal,
+        'phonetic': '/fɪʃ/',
+        'simple_pronunciation': 'f-i-sh',
+      },
     ],
     'CH': [
-      {'word': 'Chair', 'icon': Icons.chair_rounded, 'color': Colors.brown},
-      {'word': 'Teacher', 'icon': Icons.school_rounded, 'color': Colors.green},
-      {'word': 'Watch', 'icon': Icons.watch_rounded, 'color': Colors.grey},
+      {
+        'word': 'Chair',
+        'icon': Icons.chair_rounded,
+        'color': Colors.brown,
+        'phonetic': '/tʃer/',
+        'simple_pronunciation': 'ch-air',
+      },
+      {
+        'word': 'Teacher',
+        'icon': Icons.school_rounded,
+        'color': Colors.green,
+        'phonetic': "/'tiːtʃər/",
+        'simple_pronunciation': 'TEE-chur',
+      },
+      {
+        'word': 'Watch',
+        'icon': Icons.watch_rounded,
+        'color': Colors.grey,
+        'phonetic': '/wɒtʃ/',
+        'simple_pronunciation': 'w-ah-ch',
+      },
     ],
     'J': [
-      {'word': 'Jelly', 'icon': Icons.icecream_rounded, 'color': Colors.purple},
-      {'word': 'Pajamas', 'icon': Icons.hotel_rounded, 'color': Colors.blue},
-      {'word': 'Bridge', 'icon': Icons.deck_rounded, 'color': Colors.brown},
+      {
+        'word': 'Jelly',
+        'icon': Icons.icecream_rounded,
+        'color': Colors.purple,
+        'phonetic': "/'dʒeli/",
+        'simple_pronunciation': 'JEH-lee',
+      },
+      {
+        'word': 'Pajamas',
+        'icon': Icons.hotel_rounded,
+        'color': Colors.blue,
+        'phonetic': "/pə'dʒɑːməz/",
+        'simple_pronunciation': 'puh-JAH-muhz',
+      },
+      {
+        'word': 'Bridge',
+        'icon': Icons.deck_rounded,
+        'color': Colors.brown,
+        'phonetic': '/brɪdʒ/',
+        'simple_pronunciation': 'b-ri-j',
+      },
     ],
   };
 
@@ -162,6 +274,9 @@ class _PracticeScreenState extends State<PracticeScreen>
       1.5,
     ); // Higher, more cheerful pitch like Teacher Rachel
 
+    // IMPORTANT: Wait for speech to complete before resolving await
+    await _flutterTts.awaitSpeakCompletion(true);
+
     setState(() {
       _isInitialized = true;
     });
@@ -199,18 +314,20 @@ class _PracticeScreenState extends State<PracticeScreen>
       final wordToSpeak = currentContent?['word'] ?? widget.sound;
 
       // Fun introduction
-      await _flutterTts.speak("Listen carefully!");
-      await Future.delayed(const Duration(milliseconds: 1500));
+      await _flutterTts.setSpeechRate(0.5); // Normal rate
+      await _flutterTts.speak("Listen carefully.");
+      await Future.delayed(const Duration(milliseconds: 500));
 
-      // Speak the word with enthusiasm
-      await _flutterTts.speak("$wordToSpeak! $wordToSpeak!");
+      // Speak the word slowly
+      await _flutterTts.setSpeechRate(0.1); // Very slow for clear pronunciation
+      await _flutterTts.speak(wordToSpeak);
 
       // Wait for speech to complete
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(milliseconds: 800));
 
       // Encouraging ending
+      await _flutterTts.setSpeechRate(0.5); // Reset
       await _flutterTts.speak("Now you say $wordToSpeak!");
-      await Future.delayed(const Duration(milliseconds: 1500));
     } catch (e) {
       print("TTS Error: $e");
     }
@@ -387,6 +504,8 @@ class _PracticeScreenState extends State<PracticeScreen>
     final displayIcon = currentContent?['icon'];
     final displayColor = currentContent?['color'] ?? const Color(0xFFFFD54F);
 
+    final displaySimple = currentContent?['simple_pronunciation'] ?? '';
+
     return Scaffold(
       extendBody: true,
       body: Container(
@@ -503,6 +622,18 @@ class _PracticeScreenState extends State<PracticeScreen>
                                 color: Color(0xFF8B6F47),
                               ),
                             ),
+
+                            if (displaySimple.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                "Say: $displaySimple",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.orange.shade800,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                             const SizedBox(height: 16),
                             AnimatedBuilder(
                               animation: _floatAnimation,
