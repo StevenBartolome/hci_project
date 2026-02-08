@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'package:hci_project/widgets/hover_builder.dart';
+import 'package:hci_project/services/sound_service.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -9,8 +10,40 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
-  bool _isMuted = false;
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _floatController;
+  late Animation<double> _floatAnimation;
+  final SoundService _soundService = SoundService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Floating animation for start button
+    _floatController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _floatAnimation = Tween<double>(begin: -8, end: 8).animate(
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
+    );
+
+    // Start background music
+    _soundService.playBackgroundMusic();
+  }
+
+  void _toggleMute() {
+    _soundService.toggleMute();
+    setState(() {}); // Rebuild to update UI
+  }
+
+  @override
+  void dispose() {
+    _floatController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,27 +67,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   children: [
                     const Spacer(flex: 5),
 
-                    // Start Adventure Button - Image Button
-                    HoverBuilder(
-                      builder: (context, isHovered) {
-                        return GestureDetector(
-                          onTap: () {
-                            // Navigate to dashboard
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => const DashboardScreen(),
-                              ),
-                            );
-                          },
-                          child: AnimatedScale(
-                            scale: isHovered ? 1.05 : 1.0,
-                            duration: const Duration(milliseconds: 200),
-                            child: Image.asset(
-                              'assets/images/start_button.png',
-                              width: 200,
-                              height: 80,
-                              fit: BoxFit.contain,
-                            ),
+                    // Start Adventure Button - Image Button with Float Animation
+                    AnimatedBuilder(
+                      animation: _floatAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _floatAnimation.value),
+                          child: HoverBuilder(
+                            builder: (context, isHovered) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Play click sound
+                                  _soundService.playClick();
+                                  // Navigate to dashboard
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DashboardScreen(),
+                                    ),
+                                  );
+                                },
+                                child: AnimatedScale(
+                                  scale: isHovered ? 1.08 : 1.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  child: Image.asset(
+                                    'assets/images/start_button.png',
+                                    width: 200,
+                                    height: 80,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
@@ -70,11 +114,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 top: 16,
                 left: 16,
                 child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isMuted = !_isMuted;
-                    });
-                  },
+                  onTap: _toggleMute,
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -89,8 +129,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ],
                     ),
                     child: Icon(
-                      _isMuted ? Icons.volume_off : Icons.volume_up,
-                      color: _isMuted ? Colors.red : Colors.blue,
+                      _soundService.isMuted
+                          ? Icons.volume_off
+                          : Icons.volume_up,
+                      color: _soundService.isMuted ? Colors.red : Colors.blue,
                       size: 32,
                     ),
                   ),

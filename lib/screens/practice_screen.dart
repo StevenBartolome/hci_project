@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:record/record.dart';
+import 'package:hci_project/services/sound_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PracticeScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _PracticeScreenState extends State<PracticeScreen>
   bool _isPlaying = false;
   bool _isRecording = false;
   String? _feedbackMessage;
+  bool _isPositiveFeedback = true; // Track if current feedback is positive
   late AnimationController _pulseController;
   late AnimationController _floatController;
   late AnimationController _scaleController;
@@ -26,11 +28,14 @@ class _PracticeScreenState extends State<PracticeScreen>
   late Animation<double> _floatAnimation;
   late Animation<double> _scaleAnimation;
   late Animation<double> _feedbackAnimation;
+  late Animation<Color?> _colorAnimation;
   late FlutterTts _flutterTts;
 
   late AudioRecorder _audioRecorder;
+  final SoundService _soundService = SoundService();
   bool _isInitialized = false;
   int _selectedPosition = 0; // 0: Beginning, 1: Middle, 2: Ending
+  int _recordingAttempts = 0; // Track number of recording attempts
   // Data for sound positions
   final Map<String, List<Map<String, dynamic>>> _soundContent = {
     'S': [
@@ -195,6 +200,9 @@ class _PracticeScreenState extends State<PracticeScreen>
   void initState() {
     super.initState();
 
+    // Pause background music during practice to avoid conflict with TTS
+    _soundService.stopBackgroundMusic();
+
     // Pulse animation for recording
     _pulseController = AnimationController(
       vsync: this,
@@ -262,11 +270,16 @@ class _PracticeScreenState extends State<PracticeScreen>
     _feedbackController.dispose();
     _flutterTts.stop();
     _audioRecorder.dispose();
+
+    // Resume background music when exiting practice
+    _soundService.playBackgroundMusic();
+
     super.dispose();
   }
 
   Future<void> _playDemonstration() async {
     if (!_isInitialized) return;
+    _soundService.playClick(); // Play click sound
 
     // Trigger button press animation
     _scaleController.forward().then((_) => _scaleController.reverse());
@@ -312,6 +325,7 @@ class _PracticeScreenState extends State<PracticeScreen>
   }
 
   Future<void> _toggleRecording() async {
+    _soundService.playClick(); // Play click sound
     // Trigger button press animation
     _scaleController.forward().then((_) => _scaleController.reverse());
 
@@ -347,8 +361,12 @@ class _PracticeScreenState extends State<PracticeScreen>
           _isPlaying = false;
         });
 
-        // Start recording
-        await _audioRecorder.start(const RecordConfig(), path: '');
+        // Start recording with a temporary path
+        // The record package will save to cache directory by default
+        await _audioRecorder.start(
+          const RecordConfig(),
+          path: '/data/user/0/com.example.hci_project/cache/temp_recording.m4a',
+        );
 
         // Auto-stop after 3 seconds
         Future.delayed(const Duration(seconds: 3), () {
@@ -404,12 +422,35 @@ class _PracticeScreenState extends State<PracticeScreen>
       {"text": "You're a star! ⭐", "voice": "You're a shining star!"},
     ];
 
-    // Random feedback
+    final List<Map<String, String>> tryAgainFeedback = [
+      {"text": "Almost there! 💪", "voice": "Almost there! Try one more time!"},
+      {
+        "text": "Keep practicing! 🎯",
+        "voice": "Keep practicing! You're doing great!",
+      },
+      {"text": "Try again! 💪", "voice": "Let's try again! You can do it!"},
+      {"text": "One more time! 🎵", "voice": "Let's give it one more try!"},
+      {
+        "text": "You're so close! 🎯",
+        "voice": "You're so close! Try it again!",
+      },
+    ];
+
+    // Increment attempt counter
+    _recordingAttempts++;
+
+    // Alternate between positive and try-again feedback
     final random = Random();
-    final feedback = positiveFeedback[random.nextInt(positiveFeedback.length)];
+    final isPositive =
+        _recordingAttempts % 2 == 1; // Odd attempts: positive, Even: try again
+
+    final feedback = isPositive
+        ? positiveFeedback[random.nextInt(positiveFeedback.length)]
+        : tryAgainFeedback[random.nextInt(tryAgainFeedback.length)];
 
     setState(() {
       _feedbackMessage = feedback['text'];
+      _isPositiveFeedback = isPositive; // Store feedback type for UI
     });
 
     // Trigger feedback animation
@@ -428,6 +469,7 @@ class _PracticeScreenState extends State<PracticeScreen>
     return Expanded(
       child: GestureDetector(
         onTap: () {
+          _soundService.playClick(); // Play click sound
           setState(() {
             _selectedPosition = index;
           });
@@ -500,7 +542,10 @@ class _PracticeScreenState extends State<PracticeScreen>
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        _soundService.playClick();
+                        Navigator.pop(context);
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -706,19 +751,25 @@ class _PracticeScreenState extends State<PracticeScreen>
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(
-                                        Icons.celebration,
-                                        color: Color(0xFF4CAF50),
+                                      Icon(
+                                        _isPositiveFeedback
+                                            ? Icons.celebration
+                                            : Icons.lightbulb_outline,
+                                        color: _isPositiveFeedback
+                                            ? const Color(0xFF4CAF50)
+                                            : const Color(0xFFFF9800),
                                         size: 28,
                                       ),
                                       const SizedBox(width: 8),
                                       Flexible(
                                         child: Text(
                                           _feedbackMessage!,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xFF4CAF50),
+                                            color: _isPositiveFeedback
+                                                ? const Color(0xFF4CAF50)
+                                                : const Color(0xFFFF9800),
                                           ),
                                           textAlign: TextAlign.center,
                                         ),

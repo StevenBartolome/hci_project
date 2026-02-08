@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hci_project/widgets/hover_builder.dart';
+import 'package:hci_project/services/sound_service.dart';
 
 import 'how_to_use_screen.dart';
 import 'sound_selection_screen.dart';
@@ -16,6 +17,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
+  final SoundService _soundService = SoundService();
 
   // List of pages for navigation
   final List<Widget> _pages = [
@@ -25,7 +27,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const Center(child: Text("Profile Screen - Coming Soon")),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    // Ensure background music continues playing
+    _soundService.playBackgroundMusic();
+  }
+
   void _onItemTapped(int index) {
+    _soundService.playClick();
     setState(() {
       _selectedIndex = index;
     });
@@ -199,6 +209,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     icon: const Icon(Icons.lock_outline, color: Colors.grey),
                     tooltip: 'Parent Access',
                     onPressed: () {
+                      _soundService.playClick();
                       // TODO: Implement Parent Access
                     },
                   ),
@@ -325,7 +336,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: HoverBuilder(
         builder: (context, isHovered) {
           return GestureDetector(
-            onTap: onTap,
+            onTap: () {
+              _soundService.playClick();
+              onTap();
+            },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 110,
@@ -483,6 +497,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  _soundService.playClick();
                   _onItemTapped(1); // Resume goes to Practice tab
                 },
                 style: ElevatedButton.styleFrom(
@@ -667,6 +682,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 child: FloatingActionButton(
                   onPressed: () {
+                    _soundService.playClick();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
