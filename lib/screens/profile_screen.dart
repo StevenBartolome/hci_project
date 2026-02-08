@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:hci_project/services/sound_service.dart';
 import 'package:hci_project/widgets/hover_builder.dart';
 import 'package:hci_project/screens/rewards_screen.dart';
+import 'package:hci_project/screens/parent_dashboard_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback? onNavigateToRewards;
@@ -739,8 +740,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showParentAccessModal(BuildContext context) {
-    final TextEditingController passwordController = TextEditingController();
-    const String correctPassword = "Test123!";
+    final TextEditingController pinController = TextEditingController();
+    const String correctPin = "123456";
 
     showDialog(
       context: context,
@@ -795,27 +796,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Password Field
+                      // PIN Field
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(color: Colors.grey.shade300),
                         ),
                         child: TextField(
-                          controller: passwordController,
+                          controller: pinController,
                           obscureText: true,
+                          keyboardType: TextInputType.number,
+                          maxLength: 6,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Enter Password",
-                            icon: Icon(Icons.lock),
+                            hintText: "Enter PIN (123456)",
+                            counterText: "",
+                            icon: Icon(Icons.lock_outline),
                           ),
                         ),
                       ),
+                      const SizedBox(height: 24),
+
                       const SizedBox(height: 24),
 
                       // Submit Button
@@ -824,39 +830,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             _soundService.playClick();
-                            if (passwordController.text == correctPassword) {
+                            if (pinController.text == correctPin) {
                               Navigator.pop(context);
-                              // TODO: Navigate to parent settings
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Access Granted!"),
-                                  backgroundColor: Colors.green,
-                                  duration: Duration(seconds: 2),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ParentDashboardScreen(),
                                 ),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Wrong password! Try again."),
-                                  backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 2),
+                                SnackBar(
+                                  content: const Text(
+                                    "Incorrect PIN. Try 123456",
+                                  ),
+                                  backgroundColor: Colors.red.shade400,
+                                  behavior: SnackBarBehavior.floating,
                                 ),
                               );
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade600,
+                            backgroundColor: Colors.orange.shade400,
+                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
+                            elevation: 5,
                           ),
                           child: const Text(
-                            "Submit",
+                            "Enter Parent Mode",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
                             ),
                           ),
                         ),
