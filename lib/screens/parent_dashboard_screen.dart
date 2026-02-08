@@ -1026,6 +1026,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                             '6 years old',
                             '7 years old',
                             '8 years old',
+                            '8+ years old',
                           ]
                           .map(
                             (age) =>
@@ -1440,178 +1441,226 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   void _showHelpSupportDialog(BuildContext context) {
     showDialog(
       context: context,
+      barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
+          backgroundColor: Colors.transparent,
           child: Container(
-            constraints: const BoxConstraints(maxHeight: 600),
+            constraints: const BoxConstraints(maxHeight: 650, maxWidth: 500),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.orange.shade50, Colors.amber.shade50],
+                colors: [
+                  Colors.orange.shade100.withOpacity(0.95),
+                  Colors.amber.shade100.withOpacity(0.95),
+                ],
               ),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.orange.shade200, width: 2),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Header
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.orange.shade400, Colors.deepOrange],
-                    ),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(22),
-                      topRight: Radius.circular(22),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.help_outline_rounded,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                      const SizedBox(width: 12),
-                      const Expanded(
-                        child: Text(
-                          'Help & Support',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Content
-                Flexible(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Welcome message
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.orange.shade100,
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Text('🦁', style: TextStyle(fontSize: 32)),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Need help with VocaAid? We\'re here to help!',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.brown.shade800,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // FAQ Section
-                        Text(
-                          'Frequently Asked Questions',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown.shade800,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        _buildFAQItem(
-                          '📱 How do I start a practice session?',
-                          'Tap on any sound card from the main dashboard to begin practicing that specific sound.',
-                          Colors.blue,
-                        ),
-                        _buildFAQItem(
-                          '⭐ How are rewards earned?',
-                          'Complete practice sessions with good accuracy to earn stickers and unlock new safari adventures!',
-                          Colors.amber,
-                        ),
-                        _buildFAQItem(
-                          '👨‍👩‍👧 How do I access Parent Dashboard?',
-                          'Look for the small parent icon at the bottom of the main screen and enter your PIN.',
-                          Colors.green,
-                        ),
-                        _buildFAQItem(
-                          '🔊 Audio not working?',
-                          'Check your device volume and ensure microphone permissions are enabled in device settings.',
-                          Colors.purple,
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Contact Section
-                        Text(
-                          'Still Need Help?',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown.shade800,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: Colors.orange.shade200),
-                          ),
-                          child: Column(
-                            children: [
-                              _buildContactOption(
-                                Icons.email_outlined,
-                                'Email Support',
-                                'support@vocaaid.com',
-                                Colors.orange,
-                              ),
-                              const Divider(height: 24),
-                              _buildContactOption(
-                                Icons.bug_report_outlined,
-                                'Report an Issue',
-                                'Tap to report bugs',
-                                Colors.red,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.5),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.orange.shade200.withOpacity(0.5),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
                 ),
               ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Header with gradient
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.orange.shade300.withOpacity(0.9),
+                            Colors.deepOrange.withOpacity(0.9),
+                          ],
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.help_outline_rounded,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Text(
+                              'Help & Support',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(
+                              Icons.close_rounded,
+                              color: Colors.white,
+                            ),
+                            style: IconButton.styleFrom(
+                              backgroundColor: Colors.white.withOpacity(0.2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Content
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Welcome message with glassmorphism
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.6),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.orange.shade200.withOpacity(
+                                      0.3,
+                                    ),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange.shade50,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Text(
+                                      '🦁',
+                                      style: TextStyle(fontSize: 28),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      'Need help with VocaAid?\nWe\'re here to help!',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.brown.shade800,
+                                        height: 1.3,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // FAQ Section Title
+                            Text(
+                              'Frequently Asked Questions',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown.shade800,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            _buildFAQItem(
+                              '📱 How do I start a practice session?',
+                              'Tap on any sound card from the main dashboard to begin practicing that specific sound.',
+                              Colors.blue,
+                            ),
+                            _buildFAQItem(
+                              '⭐ How are rewards earned?',
+                              'Complete practice sessions with good accuracy to earn stickers and unlock new safari adventures!',
+                              Colors.amber.shade700,
+                            ),
+                            _buildFAQItem(
+                              '👨‍👩‍👧 How do I access Parent Dashboard?',
+                              'Look for the small parent icon at the bottom of the main screen and enter your PIN.',
+                              Colors.green,
+                            ),
+                            _buildFAQItem(
+                              '🔊 Audio not working?',
+                              'Check your device volume and ensure microphone permissions are enabled in device settings.',
+                              Colors.purple,
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // Contact Section
+                            Text(
+                              'Still Need Help?',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown.shade800,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.6),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  _buildContactOption(
+                                    Icons.email_outlined,
+                                    'Email Support',
+                                    'support@vocaaid.com',
+                                    Colors.orange,
+                                  ),
+                                  const Divider(height: 24),
+                                  _buildContactOption(
+                                    Icons.bug_report_outlined,
+                                    'Report an Issue',
+                                    'Tap to report bugs',
+                                    Colors.red,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         );
@@ -1623,13 +1672,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.6),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accentColor.withOpacity(0.3)),
+        border: Border.all(color: Colors.white.withOpacity(0.7)),
         boxShadow: [
           BoxShadow(
-            color: accentColor.withOpacity(0.1),
-            blurRadius: 4,
+            color: accentColor.withOpacity(0.15),
+            blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
@@ -1637,7 +1686,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
       child: Theme(
         data: ThemeData(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           title: Text(
             question,
             style: TextStyle(
@@ -1647,16 +1696,23 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
             ),
           ),
           iconColor: accentColor,
-          collapsedIconColor: accentColor.withOpacity(0.6),
+          collapsedIconColor: accentColor.withOpacity(0.7),
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+              decoration: BoxDecoration(
+                color: accentColor.withOpacity(0.05),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+              ),
               child: Text(
                 answer,
                 style: TextStyle(
                   fontSize: 13,
-                  color: Colors.grey.shade700,
-                  height: 1.4,
+                  color: Colors.grey.shade800,
+                  height: 1.5,
                 ),
               ),
             ),
