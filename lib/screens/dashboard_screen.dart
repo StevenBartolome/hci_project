@@ -8,6 +8,7 @@ import 'how_to_use_screen.dart';
 import 'sound_selection_screen.dart';
 import 'rewards_screen.dart';
 import 'profile_screen.dart';
+import 'practice_progress_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -113,7 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _buildAchievements(),
 
                     // Extra space for FAB and BottomNavBar
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -155,28 +156,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Expanded(
                   child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.orange.shade200,
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                      GestureDetector(
+                        onTap: () {
+                          _soundService.playClick();
+                          _onItemTapped(3); // Navigate to Profile tab
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.orange.shade200,
+                              width: 2,
                             ),
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: 24,
-                          backgroundColor: Colors.orange.shade50,
-                          backgroundImage: const AssetImage(
-                            'assets/images/profile_avatar/lion.png',
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: CircleAvatar(
+                            radius: 24,
+                            backgroundColor: Colors.orange.shade50,
+                            backgroundImage: const AssetImage(
+                              'assets/images/profile_avatar/lion.png',
+                            ),
                           ),
                         ),
                       ),
@@ -324,7 +331,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: Colors.purple.shade100,
           iconColor: Colors.purple.shade700,
           onTap: () {
-            // TODO: Implement Progress page or modal
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PracticeProgressScreen(),
+              ),
+            );
           },
         ),
       ],
@@ -558,7 +570,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _onItemTapped(2); // Navigate to Rewards
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: const Size(50, 30),

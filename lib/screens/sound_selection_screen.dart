@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hci_project/widgets/hover_builder.dart';
 import 'practice_screen.dart';
+import 'practice_progress_screen.dart';
 
 class SoundSelectionScreen extends StatelessWidget {
   const SoundSelectionScreen({super.key});
@@ -104,6 +105,37 @@ class SoundSelectionScreen extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF5D4E37),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Play click sound if available, otherwise just navigate
+                          // SoundService().playClick(); // Assuming SoundService is available or imported
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const PracticeProgressScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.bar_chart_rounded,
+                            color: Colors.purple,
                           ),
                         ),
                       ),

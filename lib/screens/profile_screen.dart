@@ -131,33 +131,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Avatar with Edit Button
               Stack(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [Colors.orange.shade300, Colors.amber.shade200],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.orange.withOpacity(0.3),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
+                  GestureDetector(
+                    onTap: () {
+                      _soundService.playClick();
+                      _showAvatarSelection();
+                    },
                     child: Container(
-                      width: 110,
-                      height: 110,
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.orange.shade50,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 4),
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.orange.shade300,
+                            Colors.amber.shade200,
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.orange.withOpacity(0.3),
+                            blurRadius: 15,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
                       ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'assets/images/profile_avatar/lion.png',
-                          fit: BoxFit.cover,
+                      child: Container(
+                        width: 110,
+                        height: 110,
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade50,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 4),
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/profile_avatar/lion.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -168,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: GestureDetector(
                       onTap: () {
                         _soundService.playClick();
-                        // TODO: Implement avatar change
+                        _showAvatarSelection();
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -730,9 +739,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showParentAccessModal(BuildContext context) {
-    int? answer;
-    final TextEditingController answerController = TextEditingController();
-    const int correctAnswer = 8; // 5 + 3 = 8
+    final TextEditingController passwordController = TextEditingController();
+    const String correctPassword = "Test123!";
 
     showDialog(
       context: context,
@@ -769,7 +777,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "For Parents Only 👨‍👩‍👧",
+                            "Parent Access 🔒",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -787,116 +795,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Question
+                      // Password Field
                       Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: Colors.blue.shade200,
-                            width: 2,
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
                         ),
-                        child: Text(
-                          "What is 5 + 3?",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown.shade800,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Enter Password",
+                            icon: Icon(Icons.lock),
                           ),
                         ),
                       ),
                       const SizedBox(height: 24),
 
-                      // Number Pad
-                      GridView.count(
-                        shrinkWrap: true,
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 1.5,
-                        children: [
-                          ...List.generate(9, (index) {
-                            final number = index + 1;
-                            return _buildNumberButton(number.toString(), () {
-                              _soundService.playClick();
-                              setState(() {
-                                answer = number;
-                                answerController.text = number.toString();
-                              });
-                            }, answer == number);
-                          }),
-                          _buildNumberButton(
-                            "Clear",
-                            () {
-                              _soundService.playClick();
-                              setState(() {
-                                answer = null;
-                                answerController.clear();
-                              });
-                            },
-                            false,
-                            isSpecial: true,
-                          ),
-                          _buildNumberButton("0", () {
+                      // Submit Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
                             _soundService.playClick();
-                            setState(() {
-                              answer = 0;
-                              answerController.text = "0";
-                            });
-                          }, answer == 0),
-                          _buildNumberButton(
-                            "✓",
-                            () {
-                              _soundService.playClick();
-                              if (answer == correctAnswer) {
-                                Navigator.pop(context);
-                                // TODO: Navigate to parent settings
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Access Granted!"),
-                                    backgroundColor: Colors.green,
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Wrong answer! Try again."),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              }
-                            },
-                            false,
-                            isSpecial: true,
+                            if (passwordController.text == correctPassword) {
+                              Navigator.pop(context);
+                              // TODO: Navigate to parent settings
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Access Granted!"),
+                                  backgroundColor: Colors.green,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Wrong password! Try again."),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade600,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Display answer
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 2,
-                          ),
-                        ),
-                        child: Text(
-                          answer?.toString() ?? "_",
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown.shade800,
+                          child: const Text(
+                            "Submit",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -904,48 +865,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNumberButton(
-    String label,
-    VoidCallback onTap,
-    bool isSelected, {
-    bool isSpecial = false,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? LinearGradient(
-                  colors: [Colors.blue.shade400, Colors.blue.shade600],
-                )
-              : LinearGradient(
-                  colors: isSpecial
-                      ? [Colors.orange.shade300, Colors.orange.shade500]
-                      : [Colors.grey.shade200, Colors.grey.shade300],
-                ),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: label.length > 2 ? 14 : 24,
-              fontWeight: FontWeight.bold,
-              color: isSelected || isSpecial ? Colors.white : Colors.black87,
             ),
           ),
         ),
@@ -1024,79 +943,95 @@ class _AvatarSelectionScreenState extends State<_AvatarSelectionScreen> {
                 ),
               ),
               Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(20),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                  ),
-                  itemCount: _avatars.length,
-                  itemBuilder: (context, index) {
-                    final isSelected = _selectedIndex == index;
-                    return HoverBuilder(
-                      builder: (context, isHovered) {
-                        return GestureDetector(
-                          onTap: () {
-                            SoundService().playClick();
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            transform: isHovered || isSelected
-                                ? Matrix4.translationValues(0, -5, 0)
-                                : Matrix4.identity(),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: isSelected
-                                    ? Colors.orange
-                                    : (isHovered
-                                          ? Colors.orange.withOpacity(0.5)
-                                          : Colors.transparent),
-                                width: isSelected ? 4 : 3,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: isSelected
-                                      ? Colors.orange.withOpacity(0.3)
-                                      : Colors.black.withOpacity(0.1),
-                                  blurRadius: isSelected ? 15 : 10,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Image.asset(_avatars[index]),
-                                ),
-                                if (isSelected)
-                                  Positioned(
-                                    top: 8,
-                                    right: 8,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: const BoxDecoration(
-                                        color: Colors.orange,
-                                        shape: BoxShape.circle,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final double itemWidth = (constraints.maxWidth - 60) / 2;
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.all(20),
+                      child: Center(
+                        child: Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          alignment: WrapAlignment.center,
+                          children: List.generate(_avatars.length, (index) {
+                            final isSelected = _selectedIndex == index;
+                            return SizedBox(
+                              width: itemWidth,
+                              height: itemWidth,
+                              child: HoverBuilder(
+                                builder: (context, isHovered) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      SoundService().playClick();
+                                      setState(() {
+                                        _selectedIndex = index;
+                                      });
+                                    },
+                                    child: AnimatedContainer(
+                                      duration: const Duration(
+                                        milliseconds: 200,
                                       ),
-                                      child: const Icon(
-                                        Icons.check,
-                                        color: Colors.white,
-                                        size: 20,
+                                      transform: isHovered || isSelected
+                                          ? Matrix4.translationValues(0, -5, 0)
+                                          : Matrix4.identity(),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.9),
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? Colors.orange
+                                              : (isHovered
+                                                    ? Colors.orange.withOpacity(
+                                                        0.5,
+                                                      )
+                                                    : Colors.transparent),
+                                          width: isSelected ? 4 : 3,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: isSelected
+                                                ? Colors.orange.withOpacity(0.3)
+                                                : Colors.black.withOpacity(0.1),
+                                            blurRadius: isSelected ? 15 : 10,
+                                            offset: const Offset(0, 5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Image.asset(_avatars[index]),
+                                          ),
+                                          if (isSelected)
+                                            Positioned(
+                                              top: 8,
+                                              right: 8,
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  4,
+                                                ),
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.orange,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -1133,7 +1068,7 @@ class _AvatarSelectionScreenState extends State<_AvatarSelectionScreen> {
                         ),
                         elevation: 5,
                       ),
-                      child: const Text(
+                      child: Text(
                         "Save Change",
                         style: TextStyle(
                           fontSize: 18,

@@ -5,6 +5,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:record/record.dart';
 import 'package:hci_project/services/sound_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'practice_progress_screen.dart';
 
 class PracticeScreen extends StatefulWidget {
   final String sound;
@@ -573,6 +574,36 @@ class _PracticeScreenState extends State<PracticeScreen>
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF5D4E37),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _soundService.playClick();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const PracticeProgressScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.bar_chart_rounded,
+                          color: Colors.purple,
                         ),
                       ),
                     ),
