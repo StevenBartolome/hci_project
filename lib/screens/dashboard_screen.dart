@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'how_to_use_screen.dart';
+import 'profile_screen.dart';
+import '../widgets/hover_builder.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -21,11 +23,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/safari_background.png'),
             fit: BoxFit.cover,
             alignment: Alignment.center,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.5),
+              BlendMode.dstATop,
+            ),
           ),
         ),
         child: SafeArea(
@@ -258,44 +264,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required VoidCallback onTap,
   }) {
     return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: 110,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
+      child: HoverBuilder(
+        builder: (context, isHovered) {
+          return Transform.scale(
+            scale: isHovered ? 1.05 : 1.0,
+            child: GestureDetector(
+              onTap: onTap,
+              child: Container(
+                height: 110,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.6),
-                  shape: BoxShape.circle,
+                  color: color,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(isHovered ? 0.15 : 0.05),
+                      blurRadius: isHovered ? 12 : 8,
+                      offset: isHovered
+                          ? const Offset(0, 6)
+                          : const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                child: Icon(icon, size: 32, color: iconColor),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: iconColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(icon, size: 32, color: iconColor),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: iconColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -305,7 +320,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 20),
-          padding: const EdgeInsets.fromLTRB(20, 30, 140, 20),
+          // Changed padding to match other cards (16) but kept right padding for mascot
+          padding: const EdgeInsets.fromLTRB(16, 16, 140, 16),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.8),
             borderRadius: BorderRadius.circular(20),
@@ -318,6 +334,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
+
           child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -557,40 +574,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildFab() {
-    return ClipOval(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white.withOpacity(0.3),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+    return HoverBuilder(
+      builder: (context, isHovered) {
+        return Transform.scale(
+          scale: isHovered ? 1.1 : 1.0,
+          child: ClipOval(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(isHovered ? 0.2 : 0.1),
+                      blurRadius: isHovered ? 15 : 10,
+                      offset: isHovered
+                          ? const Offset(0, 8)
+                          : const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HowToUseScreen(),
+                      ),
+                    );
+                  },
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  child: const Icon(Icons.help_outline, color: Colors.grey),
+                ),
               ),
-            ],
+            ),
           ),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HowToUseScreen()),
-              );
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: const Icon(Icons.help_outline, color: Colors.grey),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -665,10 +693,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final bool isSelected = _selectedIndex == index;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
+        if (index == 3) {
+          // Navigate to Profile Screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+          );
+        } else {
+          setState(() {
+            _selectedIndex = index;
+          });
+        }
       },
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

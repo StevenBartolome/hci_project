@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
+import '../widgets/hover_builder.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -17,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/welcome_bg.png'),
             fit: BoxFit.cover,
@@ -43,11 +44,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         );
                       },
-                      child: Image.asset(
-                        'assets/images/start_button.png',
-                        width: 200,
-                        height: 80,
-                        fit: BoxFit.contain,
+                      child: HoverBuilder(
+                        builder: (context, isHovered) {
+                          return Transform.scale(
+                            scale: isHovered ? 1.05 : 1.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  40,
+                                ), // Approximate for pill shape
+                                boxShadow: isHovered
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          blurRadius: 15,
+                                          offset: const Offset(0, 8),
+                                        ),
+                                      ]
+                                    : [],
+                              ),
+                              child: Image.asset(
+                                'assets/images/start_button.png',
+                                width: 200,
+                                height: 80,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
 
