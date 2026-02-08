@@ -347,8 +347,12 @@ class _PracticeScreenState extends State<PracticeScreen>
           _isPlaying = false;
         });
 
-        // Start recording
-        await _audioRecorder.start(const RecordConfig(), path: '');
+        // Start recording with a temporary path
+        // The record package will save to cache directory by default
+        await _audioRecorder.start(
+          const RecordConfig(),
+          path: '/data/user/0/com.example.hci_project/cache/temp_recording.m4a',
+        );
 
         // Auto-stop after 3 seconds
         Future.delayed(const Duration(seconds: 3), () {

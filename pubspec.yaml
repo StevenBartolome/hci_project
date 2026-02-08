@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10
   flutter_tts: ^4.2.0
-  record: ^5.1.2
+  record: 5.1.0
   permission_handler: ^11.3.1
 
 dev_dependencies:
@@ -49,6 +49,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+dependency_overrides:
+  record_platform_interface: 1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
