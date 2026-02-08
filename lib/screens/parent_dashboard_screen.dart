@@ -789,10 +789,27 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildSectionTitle('History'),
-              TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.download),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Implement export functionality
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Exporting report...')),
+                  );
+                },
+                icon: const Icon(Icons.download, size: 18),
                 label: const Text('Export Report'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepOrange,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                ),
               ),
             ],
           ),
