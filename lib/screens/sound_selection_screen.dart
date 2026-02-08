@@ -43,18 +43,6 @@ class SoundSelectionScreen extends StatelessWidget {
       'emoji': '🤫',
       'name': 'Quiet / SH Sound',
     },
-    {
-      'symbol': 'CH',
-      'color': 0xFFFFCA28,
-      'emoji': '🚆',
-      'name': 'Choo-Choo / CH Sound',
-    },
-    {
-      'symbol': 'J',
-      'color': 0xFF5C6BC0,
-      'emoji': '🧃',
-      'name': 'Juice / J Sound',
-    },
   ];
 
   @override

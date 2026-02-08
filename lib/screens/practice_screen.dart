@@ -37,6 +37,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Sun',
         'icon': Icons.wb_sunny_rounded,
+        'image': 'assets/images/practice_screen/sun.png',
         'color': Colors.orange,
         'phonetic': '/sʌn/',
         'simple_pronunciation': 's-uh-n',
@@ -44,6 +45,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Basin',
         'icon': Icons.wash_rounded,
+        'image': 'assets/images/practice_screen/basin.png',
         'color': Colors.blue,
         'phonetic': "/'beɪsn/",
         'simple_pronunciation': 'BAY-sin',
@@ -51,6 +53,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Bus',
         'icon': Icons.directions_bus_rounded,
+        'image': 'assets/images/practice_screen/bus.png',
         'color': Colors.yellow,
         'phonetic': '/bʌs/',
         'simple_pronunciation': 'b-uh-s',
@@ -60,6 +63,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Zoo',
         'icon': Icons.fence_rounded,
+        'image': 'assets/images/practice_screen/zoo.png',
         'color': Colors.grey,
         'phonetic': '/zuː/',
         'simple_pronunciation': 'z-oo',
@@ -67,6 +71,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Puzzle',
         'icon': Icons.extension_rounded,
+        'image': 'assets/images/practice_screen/puzzle.png',
         'color': Colors.red,
         'phonetic': "/'pʌzl/",
         'simple_pronunciation': 'PUH-zl',
@@ -74,6 +79,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Jazz',
         'icon': Icons.music_note_rounded,
+        'image': 'assets/images/practice_screen/jazz.png',
         'color': Colors.purple,
         'phonetic': '/dʒæz/',
         'simple_pronunciation': 'j-az',
@@ -83,6 +89,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Rabbit',
         'icon': Icons.pest_control_rodent_rounded,
+        'image': 'assets/images/practice_screen/rabbit.png',
         'color': Colors.brown,
         'phonetic': "/'ræbɪt/",
         'simple_pronunciation': 'RAB-it',
@@ -90,6 +97,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Carrot',
         'icon': Icons.restaurant_rounded,
+        'image': 'assets/images/practice_screen/carrot.png',
         'color': Colors.orange,
         'phonetic': "/'kærət/",
         'simple_pronunciation': 'KAIR-uh-t',
@@ -97,6 +105,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Car',
         'icon': Icons.directions_car_rounded,
+        'image': 'assets/images/practice_screen/car.png',
         'color': Colors.red,
         'phonetic': '/kɑːr/',
         'simple_pronunciation': 'k-ar',
@@ -106,6 +115,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Lion',
         'icon': Icons.pets_rounded,
+        'image': 'assets/images/practice_screen/lion.png',
         'color': Colors.orange,
         'phonetic': "/'laɪən/",
         'simple_pronunciation': 'LIE-uh-n',
@@ -113,6 +123,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Balloon',
         'icon': Icons.bubble_chart_rounded,
+        'image': 'assets/images/practice_screen/balloon.png',
         'color': Colors.pink,
         'phonetic': "/bə'luːn/",
         'simple_pronunciation': 'buh-LOON',
@@ -120,6 +131,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Ball',
         'icon': Icons.sports_soccer_rounded,
+        'image': 'assets/images/practice_screen/ball.png',
         'color': Colors.white,
         'phonetic': '/bɔːl/',
         'simple_pronunciation': 'b-aw-l',
@@ -129,6 +141,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Thumb',
         'icon': Icons.thumb_up_rounded,
+        'image': 'assets/images/practice_screen/thumb.png',
         'color': Colors.amber,
         'phonetic': '/θʌm/',
         'simple_pronunciation': 'th-uh-m',
@@ -136,6 +149,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Toothbrush',
         'icon': Icons.brush_rounded,
+        'image': 'assets/images/practice_screen/toothbrush.png',
         'color': Colors.blue,
         'phonetic': "/'tuːθbrʌʃ/",
         'simple_pronunciation': 'TOOTH-brush',
@@ -143,6 +157,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Mouth',
         'icon': Icons.tag_faces_rounded,
+        'image': 'assets/images/practice_screen/mouth.png',
         'color': Colors.red,
         'phonetic': '/maʊθ/',
         'simple_pronunciation': 'm-ow-th',
@@ -152,6 +167,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Shoe',
         'icon': Icons.do_not_step_rounded,
+        'image': 'assets/images/practice_screen/shoe.png',
         'color': Colors.brown,
         'phonetic': '/ʃuː/',
         'simple_pronunciation': 'sh-oo',
@@ -159,6 +175,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Fishing',
         'icon': Icons.phishing_rounded,
+        'image': 'assets/images/practice_screen/fishing.png',
         'color': Colors.blue,
         'phonetic': "/'fɪʃɪŋ/",
         'simple_pronunciation': 'FISH-ing',
@@ -166,55 +183,10 @@ class _PracticeScreenState extends State<PracticeScreen>
       {
         'word': 'Fish',
         'icon': Icons.set_meal_rounded,
+        'image': 'assets/images/practice_screen/fish.png',
         'color': Colors.teal,
         'phonetic': '/fɪʃ/',
         'simple_pronunciation': 'f-i-sh',
-      },
-    ],
-    'CH': [
-      {
-        'word': 'Chair',
-        'icon': Icons.chair_rounded,
-        'color': Colors.brown,
-        'phonetic': '/tʃer/',
-        'simple_pronunciation': 'ch-air',
-      },
-      {
-        'word': 'Teacher',
-        'icon': Icons.school_rounded,
-        'color': Colors.green,
-        'phonetic': "/'tiːtʃər/",
-        'simple_pronunciation': 'TEE-chur',
-      },
-      {
-        'word': 'Watch',
-        'icon': Icons.watch_rounded,
-        'color': Colors.grey,
-        'phonetic': '/wɒtʃ/',
-        'simple_pronunciation': 'w-ah-ch',
-      },
-    ],
-    'J': [
-      {
-        'word': 'Jelly',
-        'icon': Icons.icecream_rounded,
-        'color': Colors.purple,
-        'phonetic': "/'dʒeli/",
-        'simple_pronunciation': 'JEH-lee',
-      },
-      {
-        'word': 'Pajamas',
-        'icon': Icons.hotel_rounded,
-        'color': Colors.blue,
-        'phonetic': "/pə'dʒɑːməz/",
-        'simple_pronunciation': 'puh-JAH-muhz',
-      },
-      {
-        'word': 'Bridge',
-        'icon': Icons.deck_rounded,
-        'color': Colors.brown,
-        'phonetic': '/brɪdʒ/',
-        'simple_pronunciation': 'b-ri-j',
       },
     ],
   };
@@ -502,6 +474,7 @@ class _PracticeScreenState extends State<PracticeScreen>
     // Fallback if no specific content
     final displayWord = currentContent?['word'] ?? widget.sound;
     final displayIcon = currentContent?['icon'];
+    final displayImage = currentContent?['image'];
     final displayColor = currentContent?['color'] ?? const Color(0xFFFFD54F);
 
     final displaySimple = currentContent?['simple_pronunciation'] ?? '';
@@ -666,7 +639,18 @@ class _PracticeScreenState extends State<PracticeScreen>
                                       ),
                                     ),
                                     child: Center(
-                                      child: displayIcon != null
+                                      // Display image if available, else fallback to icon
+                                      child: displayImage != null
+                                          ? Padding(
+                                              padding: const EdgeInsets.all(
+                                                24.0,
+                                              ),
+                                              child: Image.asset(
+                                                displayImage,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )
+                                          : displayIcon != null
                                           ? Icon(
                                               displayIcon,
                                               size: 80,
