@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
+import 'package:hci_project/widgets/hover_builder.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -34,21 +35,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     const Spacer(flex: 5),
 
                     // Start Adventure Button - Image Button
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to dashboard
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const DashboardScreen(),
+                    HoverBuilder(
+                      builder: (context, isHovered) {
+                        return GestureDetector(
+                          onTap: () {
+                            // Navigate to dashboard
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const DashboardScreen(),
+                              ),
+                            );
+                          },
+                          child: AnimatedScale(
+                            scale: isHovered ? 1.05 : 1.0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Image.asset(
+                              'assets/images/start_button.png',
+                              width: 200,
+                              height: 80,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         );
                       },
-                      child: Image.asset(
-                        'assets/images/start_button.png',
-                        width: 200,
-                        height: 80,
-                        fit: BoxFit.contain,
-                      ),
                     ),
 
                     const Spacer(flex: 2),

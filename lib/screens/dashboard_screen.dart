@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hci_project/widgets/hover_builder.dart';
 
 import 'how_to_use_screen.dart';
 import 'sound_selection_screen.dart';
@@ -134,26 +135,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Greeting
+                // Greeting with Avatar
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Text(
-                        'Good Afternoon,',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.brown[800],
+                      Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.orange.shade200,
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.orange.shade50,
+                          backgroundImage: const AssetImage(
+                            'assets/images/profile_avatar/lion.png',
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Steven! 🦁',
+                            'Good Afternoon,',
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 14, // Slightly smaller
+                              fontWeight: FontWeight.w600,
+                              color: Colors.brown[800],
+                            ),
+                          ),
+                          Text(
+                            'Steven!',
+                            style: TextStyle(
+                              fontSize: 20, // Slightly smaller to fit
                               fontWeight: FontWeight.bold,
                               color: Colors.orange[800],
                             ),
@@ -195,7 +221,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.orange.withValues(alpha: 0.3), width: 2),
+        border: Border.all(
+          color: Colors.orange.withValues(alpha: 0.3),
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.orange.withValues(alpha: 0.2),
@@ -293,44 +322,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required VoidCallback onTap,
   }) {
     return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: 110,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
+      child: HoverBuilder(
+        builder: (context, isHovered) {
+          return GestureDetector(
+            onTap: onTap,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 110,
+              transform: isHovered
+                  ? Matrix4.translationValues(0, -4, 0)
+                  : Matrix4.identity(),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(
+                      alpha: isHovered ? 0.1 : 0.05,
+                    ),
+                    blurRadius: isHovered ? 12 : 8,
+                    offset: isHovered ? const Offset(0, 8) : const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.6),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 32, color: iconColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.6),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, size: 32, color: iconColor),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: iconColor,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: iconColor,
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -340,7 +379,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 20),
-          padding: const EdgeInsets.fromLTRB(20, 30, 140, 20),
+          padding: const EdgeInsets.fromLTRB(20, 20, 140, 20),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(20),
@@ -444,7 +483,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                     _onItemTapped(1); // Resume goes to Practice tab
+                  _onItemTapped(1); // Resume goes to Practice tab
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -594,40 +633,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildFab() {
-    return ClipOval(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.9),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.3),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+    return HoverBuilder(
+      builder: (context, isHovered) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          transform: isHovered
+              ? Matrix4.translationValues(0, -4, 0)
+              : Matrix4.identity(),
+          child: ClipOval(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(
+                        alpha: isHovered ? 0.15 : 0.1,
+                      ),
+                      blurRadius: isHovered ? 12 : 10,
+                      offset: isHovered
+                          ? const Offset(0, 8)
+                          : const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HowToUseScreen(),
+                      ),
+                    );
+                  },
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  child: const Icon(Icons.help_outline, color: Colors.grey),
+                ),
               ),
-            ],
+            ),
           ),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HowToUseScreen()),
-              );
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: const Icon(Icons.help_outline, color: Colors.grey),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -733,7 +788,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 // Dummy class to satisfy the List<Widget> type, though strictly not needed if we filter in build
 class _HomeContentPlaceholder extends StatelessWidget {
-    const _HomeContentPlaceholder();
-    @override
-    Widget build(BuildContext context) => const SizedBox.shrink();
+  const _HomeContentPlaceholder();
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }
